@@ -5,7 +5,7 @@ After=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=bash /home/matt/dev/backup/borg.bash
+ExecStart=bash /root/borg.bash /root/.config/backups/borg-backup.config
 Nice=15
 IOSchedulingClass=best-effort
 IOSchedulingPriority=7

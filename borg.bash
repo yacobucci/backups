@@ -36,21 +36,32 @@ KEEP_WEEKLY="${KEEP_WEEKLY:-4}"
 KEEP_MONTHLY="${KEEP_MONTHLY:-6}"
 CHECK_FREQUENCY="${CHECK_FREQUENCY:-7}"
 COMPACT_DAY="${COMPACT_DAY:-01}"
+OPT_PROGRESS="${OPT_PROGRESS:-false}"
 
 echo "[INFO] Using configuration from: $VAR_FILE"
 echo "[INFO] Backing up: $BACKUP_DIRS to $BORG_REPO"
 
 # check optimizations
+COMPRESSION_FLAG=""
 if [[ -n "$OPT_COMPRESSION" ]]; then
-    OPT_COMPRESSION="--compression $OPT_COMPRESSION"
+    COMPRESSION_FLAG="--compression $OPT_COMPRESSION"
 fi
+CHUNKER_FLAG=""
 if [[ -n "$OPT_CHUNKER" ]]; then
-    OPT_CHUNKER="--chunker-params $OPT_CHUNKER"
+    CHUNKER_FLAG="--chunker-params $OPT_CHUNKER"
 fi
-borg create --verbose --stats     \
-    $OPT_COMPRESSION $OPT_CHUNKER \
-    --exclude-caches              \
-    ::'{now:%Y-%m-%d_%H:%M}'      \
+
+PROGRESS_FLAG=""
+if [[ "$OPT_PROGRESS" == "true" ]]; then
+    PROGRESS_FLAG="--progress"
+fi
+
+borg create --verbose --stats \
+    $PROGRESS_FLAG            \
+    $COMPRESSION_FLAG         \
+    $CHUNKER_FLAG             \
+    --exclude-caches          \
+    ::'{now:%Y-%m-%d_%H:%M}'  \
     "$BACKUP_DIRS"
 
 borg prune -v --list --stats       \
