@@ -1,0 +1,4 @@
+/home/matt/Downloads
+**/.cache
+/home/matt/local
+/home/matt/.local/calibri

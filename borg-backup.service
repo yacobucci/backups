@@ -1,0 +1,11 @@
+[Unit]
+Description=Run BorgBackup
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=bash /home/matt/dev/backup/borg.bash
+Nice=15
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
